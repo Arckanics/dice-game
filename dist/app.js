@@ -59,6 +59,14 @@ class DiceGame {
     this.activePlayer = () => {
       return this.#p1.getState() ? this.#p1 : this.#p2
     }
+    this.profiler = {
+      "1": "transform: rotateY(  0deg)",
+      "2": "transform: rotateY(-90deg)",
+      "3": "transform: rotateX(-90deg)",
+      "4": "transform: rotateY( 90deg)",
+      "5": "transform: rotateX( 90deg)",
+      "6": "transform: rotateY(180deg)"
+    }
   }
 
   init() {
@@ -135,24 +143,20 @@ class DiceGame {
     this.#p2.setState()
   }
 
+  resetDice() {
+    let profiler = this.profiler
+    document.querySelector('.dice').setAttribute('style', profiler["1"])
+  }
+
   rollDice() {
-    let profiler = {
-      "1": "transform: rotateY(  0deg)",
-      "2": "transform: rotateY(-90deg)",
-      "3": "transform: rotateX(-90deg)",
-      "4": "transform: rotateY( 90deg)",
-      "5": "transform: rotateX( 90deg)",
-      "6": "transform: rotateY(180deg)"
-    }
+    let profiler = this.profiler
     let rand = Math.floor(Math.random() * 6) + 1
     let player = this.activePlayer()
     document.querySelector('.dice').setAttribute('style', profiler[rand.toString()])
     if (rand > 1) {
       player.setCurrentScore(player.getCurrentScore() + rand)
       if (player.getGlobalScore() + player.getCurrentScore() >= 100) {
-        setTimeout(() => {
-          document.querySelector('.dice').setAttribute('style', profiler["1"])
-        })
+        this.resetDice()
         this.destroyEvent()
         player.isWinner()
         console.log(`${player.getName()} has won the game`)
@@ -162,6 +166,7 @@ class DiceGame {
     } else {
       player.setCurrentScore(0)
       console.log(`${player.getName()} leave the hand`)
+      this.resetDice()
       this.swapActivePlayer()
     }
   }
@@ -172,6 +177,7 @@ class DiceGame {
     player.setCurrentScore(0)
     console.log(`${player.getName()} is holding ${player.getCurrentScore()} points`)
     this.swapActivePlayer()
+    this.resetDice()
   }
 
   attatchEvent() {

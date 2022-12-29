@@ -63,6 +63,10 @@
     @apply bg-slate-50
   }
 
+  .dice svg {
+    fill: rgb(244 63 94);
+  }
+
   .dice__face--front  { transform: rotateY(  0deg) translateZ(50px); }
   .dice__face--right  { transform: rotateY( 90deg) translateZ(50px); }
   .dice__face--back   { transform: rotateY(180deg) translateZ(50px); }
