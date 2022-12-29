@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  #root-dice-game, .root-dice-game {
+    height: calc(100vw / 16 * 9);
+    width: calc(100vw - 30px);
+    margin: 15px auto;
+    max-width: 1024px;
+    max-height: calc(1024px / 16 * 9);
+    font-family: 'Lato', sans-serif;
+    @apply bg-gray-100 flex shadow-xl font-light text-gray-600 flex-nowrap justify-center relative
+  }
+
+  .player {
+    @apply flex flex-col w-1/2 text-center uppercase justify-center h-full bg-slate-50 
+  }
+
+  .player .player-name {
+    @apply font-thin relative
+  }
+
+  .player.active {
+    @apply bg-transparent
+  }
+
+  .player.active .player-name {
+    @apply font-light
+  }
+
+  .player.active .player-name::after {
+    content: '';
+    top: calc(50% - 13px/2);
+    transform: translateX(20px);
+    @apply absolute bg-rose-500 rounded-full h-[13px] w-[13px]
+  }
+
+  #game-cmd {
+    @apply flex flex-col justify-between w-1/4 absolute top-0 h-full text-center uppercase text-xl pb-24
+  }
+}
