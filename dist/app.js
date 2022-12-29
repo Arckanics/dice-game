@@ -95,14 +95,16 @@ class DiceGame {
       <div class="scene">
         <div class="dice">
           <div class="dice__face dice__face--front">1</div>
-          <div class="dice__face dice__face--back">6</div>
           <div class="dice__face dice__face--right">2</div>
-          <div class="dice__face dice__face--left">4</div>
           <div class="dice__face dice__face--top">3</div>
+          <div class="dice__face dice__face--left">4</div>
           <div class="dice__face dice__face--bottom">5</div>
+          <div class="dice__face dice__face--back">6</div>
         </div>
       </div>
     `
+
+    
 
     cmd.innerHTML = `
       <div class="new-game mt-16 cursor-pointer">new game</div>
@@ -112,6 +114,19 @@ class DiceGame {
         <div class="hold cursor-pointer">hold</div>
       </div>
     `
+
+    let faces = [...root.querySelectorAll('.dice__face')]
+    faces.map(e => {
+      let f = e.innerText
+      fetch(`./images/dice/face-${f}.svg`)
+        .then(res => {
+          return res.text()
+        })
+        .then(data => {
+          e.innerHTML = data
+        })
+    })
+
     this.attatchEvent()
   }
 
