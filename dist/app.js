@@ -52,10 +52,11 @@ class DiceGame {
   #root;
   #p1;
   #p2;
-  constructor(root, p1, p2) {
+  constructor(root, p1, p2, assets) {
     this.#root = root
     this.#p1 = p1
     this.#p2 = p2
+    this.assets = { ...assets }
     this.activePlayer = () => {
       return this.#p1.getState() ? this.#p1 : this.#p2
     }
@@ -73,15 +74,11 @@ class DiceGame {
     const root = this.#root
     const p1 = this.#p1
     const p2 = this.#p2
-    root.innerHTML = `
-      <div id="player1" class="player"></div>
-      <div id="game-cmd" class=""></div>
-      <div id="player2" class="player"></div>
-    `
-    const players = [p1,p2]
+    root.innerHTML = this.assets.root
+    const players = [p1, p2]
     let num = 1
     players.map(p => {
-      p.setRootHTML('player'+num)
+      p.setRootHTML('player' + num)
       p.root.innerHTML = `
         <div class="mb-32 ">
           <div class="text-4xl player-name">${p.getName()}</div>
@@ -98,34 +95,11 @@ class DiceGame {
     })
     p1.setState()
     let cmd = document.getElementById('game-cmd')
-
-    let dice = `
-      <div class="scene">
-        <div class="dice">
-          <div class="dice__face dice__face--front">1</div>
-          <div class="dice__face dice__face--right">2</div>
-          <div class="dice__face dice__face--top">3</div>
-          <div class="dice__face dice__face--left">4</div>
-          <div class="dice__face dice__face--bottom">5</div>
-          <div class="dice__face dice__face--back">6</div>
-        </div>
-      </div>
-    `
-
-    
-
-    cmd.innerHTML = `
-      <div class="new-game mt-16 cursor-pointer">new game</div>
-      <div class="dice-window">${dice}</div>
-      <div class="group mb-4">
-        <div class="roll-dice cursor-pointer mb-8">roll dice</div>
-        <div class="hold cursor-pointer">hold</div>
-      </div>
-    `
+    cmd.innerHTML = this.assets.cmd
 
     let faces = [...root.querySelectorAll('.dice__face')]
     faces.map(e => {
-      let f = e.innerText
+      let f = e.getAttribute('d-face')
       fetch(`./images/dice/face-${f}.svg`)
         .then(res => {
           return res.text()
@@ -207,7 +181,30 @@ const player2 = new DicePlayer("player 2")
 window.onload = () => {
   const game = new DiceGame(
     document.getElementById("root-dice-game"),
-    player1, player2
+    player1, player2, {
+    root: `
+        <div id="player1" class="player"></div>
+        <div id="game-cmd" class=""></div>
+        <div id="player2" class="player"></div>
+      `,
+    cmd: `<div class="new-game mt-16 cursor-pointer">new game</div>
+      <div class="dice-window"><div class="scene">
+      <div class="dice">
+        <div class="dice__face dice__face--front" d-face="1"></div>
+        <div class="dice__face dice__face--right" d-face="2"></div>
+        <div class="dice__face dice__face--top" d-face="3"></div>
+        <div class="dice__face dice__face--left" d-face="4"></div>
+        <div class="dice__face dice__face--bottom" d-face="5"></div>
+        <div class="dice__face dice__face--back" d-face="6"></div>
+      </div>
+    </div></div>
+      <div class="group mb-4">
+        <div class="roll-dice cursor-pointer mb-8">roll dice</div>
+        <div class="hold cursor-pointer">hold</div>
+      </div>
+      `
+
+  }
   )
   game.init()
 }
