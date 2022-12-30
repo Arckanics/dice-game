@@ -3,12 +3,21 @@
 @tailwind utilities;
 
 @layer components {
+  html {
+    font-family: 'Lato', sans-serif;
+    @apply bg-slate-200
+  }
+  body {
+    min-height: 800px
+  }
   #root-dice-game, .root-dice-game {
     height: calc(100vw / 16 * 9);
     width: calc(100vw - 30px);
     margin: 15px auto;
     max-width: 1024px;
     max-height: calc(1024px / 16 * 9);
+    min-width: 764px;
+    min-height: calc(764px / 16 * 9);
     font-family: 'Lato', sans-serif;
     @apply bg-gray-100 flex shadow-xl font-light text-gray-600 flex-nowrap justify-center relative select-none
   }
