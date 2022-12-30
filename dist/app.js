@@ -18,6 +18,7 @@ class DicePlayer {
   setCurrentScore(score) {
     this.root.querySelector('.current-score').innerText = score
     this.current = score
+    return this
   }
 
   getGlobalScore() {
@@ -27,6 +28,7 @@ class DicePlayer {
   setGlobalScore(score) {
     this.root.querySelector('.global-score').innerText = score
     this.glob = score
+    return this
   }
 
   getState() {
@@ -36,10 +38,12 @@ class DicePlayer {
   setState() {
     this.root.classList.toggle('active')
     this.active = !this.active
+    return this
   }
 
   setRootHTML(root) {
     this.root = document.getElementById(root)
+    return this
   }
 
   isWinner() {
@@ -109,49 +113,71 @@ class DiceGame {
         })
     })
 
+    let icons = [
+      {name: ".new-game", url: "./images/icons/new.svg", text: "new game"},
+      {name: ".roll-dice", url: "./images/icons/roll.svg", text: "roll dice"},
+      {name: ".hold", url: "./images/icons/hold.svg", text: "hold"}
+    ]
+
+    icons.map(i => {
+      fetch(i.url).then((response) => {
+        return response.text()
+      })
+      .then(data => {
+        document.querySelector(i.name).classList.add('icon-text')
+        document.querySelector(i.name).innerHTML = `<span class="icon">${data}</span><span>${i.text}</span>`
+      })
+    })
+
     this.attatchEvent()
+    return this
   }
 
   swapActivePlayer() {
     this.#p1.setState()
     this.#p2.setState()
+    return this
   }
 
   resetDice() {
     let profiler = this.profiler
     document.querySelector('.dice').setAttribute('style', profiler["1"])
+    return this
   }
 
   rollDice() {
+    const randNum = () => Math.floor(Math.random() * 6) + 1
     let profiler = this.profiler
-    let rand = Math.floor(Math.random() * 6) + 1
+    let rand = randNum()
     let player = this.activePlayer()
-    document.querySelector('.dice').setAttribute('style', profiler[rand.toString()])
+    const diceHtml = document.querySelector('.dice')
+    diceHtml.setAttribute('style', profiler[rand.toString()])
+    diceHtml.setAttribute('face', rand)
+    
     if (rand > 1) {
       player.setCurrentScore(player.getCurrentScore() + rand)
       if (player.getGlobalScore() + player.getCurrentScore() >= 100) {
-        this.resetDice()
-        this.destroyEvent()
+        this.resetDice().destroyEvent()
         player.isWinner()
         console.log(`${player.getName()} has won the game`)
       } else {
         console.log(`${player.getName()} launch dice and got ${rand}`)
       }
     } else {
-      player.setCurrentScore(0)
-      console.log(`${player.getName()} leave the hand`)
-      this.resetDice()
-      this.swapActivePlayer()
+      console.log(`${player.setCurrentScore(0).getName()} leave the hand`)
+      this.resetDice().swapActivePlayer()
     }
+    return this
   }
 
   holdScore() {
     let player = this.activePlayer()
-    player.setGlobalScore(player.getCurrentScore() + player.getGlobalScore())
-    player.setCurrentScore(0)
+    player
+      .setGlobalScore(player.getCurrentScore() + player.getGlobalScore())
+      .setCurrentScore(0)
     console.log(`${player.getName()} is holding ${player.getCurrentScore()} points`)
-    this.swapActivePlayer()
-    this.resetDice()
+    this.swapActivePlayer().resetDice()
+    return this
   }
 
   attatchEvent() {
@@ -164,6 +190,7 @@ class DiceGame {
 
     let hold = this.#root.querySelector('.hold')
     hold.addEventListener('click', this.holdScore.bind(this))
+    return this
   }
 
   destroyEvent() {
@@ -171,6 +198,7 @@ class DiceGame {
     let hold = this.#root.querySelector('.hold')
     dice.remove()
     hold.remove()
+    return this
   }
 
 }

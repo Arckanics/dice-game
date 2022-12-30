@@ -41,10 +41,10 @@
   }
 
   .scene {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     perspective: 600px;
-    @apply m-auto my-16 shadow-lg
+    @apply m-auto my-20 shadow-lg
   }
   
   .dice {
@@ -52,14 +52,13 @@
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transform: translateZ(-50px);
     transition: transform 0.5s;
   }
   
   .dice__face {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     @apply bg-slate-50
   }
 
@@ -67,10 +66,24 @@
     fill: rgb(244 63 94);
   }
 
-  .dice__face--front  { transform: rotateY(  0deg) translateZ(50px); }
-  .dice__face--right  { transform: rotateY( 90deg) translateZ(50px); }
-  .dice__face--back   { transform: rotateY(180deg) translateZ(50px); }
-  .dice__face--left   { transform: rotateY(-90deg) translateZ(50px); }
-  .dice__face--top    { transform: rotateX( 90deg) translateZ(50px); }
-  .dice__face--bottom { transform: rotateX(-90deg) translateZ(50px); }
+  .dice__face--front  { transform: rotateY(  0deg) translateZ(40px); }
+  .dice__face--right  { transform: rotateY( 90deg) translateZ(40px); }
+  .dice__face--back   { transform: rotateY(180deg) translateZ(40px); }
+  .dice__face--left   { transform: rotateY(-90deg) translateZ(40px); }
+  .dice__face--top    { transform: rotateX( 90deg) translateZ(40px); }
+  .dice__face--bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+  .icon-text {
+    display: flex;
+    @apply justify-center
+  }
+
+  .icon {
+    @apply w-11
+  }
+
+  .icon svg {
+    fill: rgb(244 63 94);
+    @apply h-7
+  }
 }
